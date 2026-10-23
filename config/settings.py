@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "users",
+    "stages",
 ]
 
 # Notre classe utilisateur personnalisée (stagiaire, encadrant, admin)
