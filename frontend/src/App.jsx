@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, clearToken, getToken, login } from "./api";
 import "./App.css";
+import DashboardStagiaire from "./DashboardStagiaire";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -22,7 +23,9 @@ export default function App() {
 
   if (loading) return <p className="centre">Chargement...</p>;
   if (!user) return <Connexion onConnecte={setUser} />;
-
+  if (user.role === "STAGIAIRE") {
+    return <DashboardStagiaire user={user} onDeconnecter={deconnecter} />;
+  }
   return (
     <div className="carte">
       <h1>LTIC</h1>

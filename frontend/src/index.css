@@ -1,6 +1,20 @@
+:root {
+  --fond: #0b0b10;
+  --menu: #101017;
+  --violet: #8b5cf6;
+  --vert: #22c55e;
+  --texte: #e5e7eb;
+  --gris: #9ca3af;
+  --bordure: rgba(255, 255, 255, 0.08);
+}
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #16171d;
-  color: #f3f4f6;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--texte);
+  background:
+    radial-gradient(circle at 75% -10%, rgba(139, 92, 246, 0.2), transparent 45%),
+    var(--fond);
+  background-attachment: fixed;
 }
