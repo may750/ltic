@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users",
     "stages",
+    "rest_framework",
+    "rest_framework.authtoken",
 ]
 
 # Notre classe utilisateur personnalisée (stagiaire, encadrant, admin)
@@ -88,10 +90,22 @@ STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Email
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
+
+# Email (les e-mails s'affichent dans le terminal, pratique pour tester)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+# API (Django REST Framework)
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
+
+LOGIN_REDIRECT_URL = "/api/auth/me/"
