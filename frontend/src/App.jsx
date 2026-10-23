@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api, clearToken, getToken, login } from "./api";
 import "./App.css";
 import DashboardStagiaire from "./DashboardStagiaire";
+import DashboardEncadrant from "./DashboardEncadrant";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -25,6 +26,9 @@ export default function App() {
   if (!user) return <Connexion onConnecte={setUser} />;
   if (user.role === "STAGIAIRE") {
     return <DashboardStagiaire user={user} onDeconnecter={deconnecter} />;
+  }
+    if (user.role === "ENCADRANT") {
+    return <DashboardEncadrant user={user} onDeconnecter={deconnecter} />;
   }
   return (
     <div className="carte">
