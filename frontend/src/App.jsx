@@ -3,7 +3,7 @@ import { api, clearToken, getToken, login } from "./api";
 import "./App.css";
 import DashboardStagiaire from "./DashboardStagiaire";
 import DashboardEncadrant from "./DashboardEncadrant";
-
+import DashboardAdmin from "./DashboardAdmin";
 export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(Boolean(getToken()));
@@ -29,6 +29,9 @@ export default function App() {
   }
     if (user.role === "ENCADRANT") {
     return <DashboardEncadrant user={user} onDeconnecter={deconnecter} />;
+  }
+    if (user.role === "ADMIN") {
+    return <DashboardAdmin user={user} onDeconnecter={deconnecter} />;
   }
   return (
     <div className="carte">

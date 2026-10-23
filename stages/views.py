@@ -1,16 +1,20 @@
 
-# Create your views here.
+from django.db.models import Q
 from rest_framework import mixins, viewsets
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from users.models import User
 from users.permissions import IsEncadrant, IsEncadrantOrAdmin, IsStagiaire
+from users.serializers import UserSerializer
 
-from .models import Document, Feedback, Stage, Tache
+from .models import Document, Feedback, Message, Stage, Tache
 from .serializers import (
     DocumentSerializer,
     FeedbackSerializer,
+    MessageSerializer,
     StageSerializer,
     TacheEtatSerializer,
     TacheSerializer,
@@ -111,3 +115,39 @@ class FeedbackViewSet(
     def perform_create(self, serializer):
         verifier_acces(self.request.user, serializer.validated_data["document"].stagiaire)
         serializer.save(encadrant=self.request.user)
+    
+
+def contacts_autorises(user):
+    """Les personnes à qui cet utilisateur a le droit d'écrire."""
+    if user.role == User.Role.ADMIN:
+        return User.objects.exclude(pk=user.pk)
+    admins = Q(role=User.Role.ADMIN)
+    if user.role == User.Role.ENCADRANT:
+        return User.objects.filter(admins | Q(role=User.Role.STAGIAIRE, encadrant=user))
+    return User.objects.filter(admins | Q(pk=user.encadrant_id))
+
+
+class ContactsView(APIView):
+    """La liste des contacts de la personne connectée."""
+
+    def get(self, request):
+        contacts = contacts_autorises(request.user)
+        return Response(UserSerializer(contacts, many=True).data)
+
+
+class MessageViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    serializer_class = MessageSerializer
+
+    def get_queryset(self):
+        moi = self.request.user
+        return Message.objects.filter(Q(expediteur=moi) | Q(destinataire=moi))
+
+    def perform_create(self, serializer):
+        destinataire = serializer.validated_data["destinataire"]
+        if not contacts_autorises(self.request.user).filter(pk=destinataire.pk).exists():
+            raise PermissionDenied("Vous ne pouvez pas écrire à cette personne.")
+        serializer.save(expediteur=self.request.user)    

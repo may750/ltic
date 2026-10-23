@@ -1,14 +1,27 @@
+import { useState } from "react";
+import Messagerie from "./Messagerie";
+
 // Le « cadre » commun à toutes les pages : menu à gauche + contenu à droite
 export default function Layout({ user, roleLabel, titre, onDeconnecter, children }) {
+  const [page, setPage] = useState("tableau");
+
   return (
     <div className="app">
       <aside className="menu">
         <div className="logo">LTIC</div>
         <p className="menu-titre">MENU</p>
         <nav>
-          <div className="menu-item actif">Tableau de bord</div>
-          <div className="menu-item">
-            Messagerie <span className="bientot">bientôt</span>
+          <div
+            className={"menu-item cliquable" + (page === "tableau" ? " actif" : "")}
+            onClick={() => setPage("tableau")}
+          >
+            Tableau de bord
+          </div>
+          <div
+            className={"menu-item cliquable" + (page === "messagerie" ? " actif" : "")}
+            onClick={() => setPage("messagerie")}
+          >
+            Messagerie
           </div>
           <div className="menu-item">
             Notifications <span className="bientot">bientôt</span>
@@ -28,8 +41,17 @@ export default function Layout({ user, roleLabel, titre, onDeconnecter, children
         </div>
       </aside>
       <main className="contenu">
-        <h1 className="titre-page">{titre}</h1>
-        {children}
+        {page === "tableau" ? (
+          <>
+            <h1 className="titre-page">{titre}</h1>
+            {children}
+          </>
+        ) : (
+          <>
+            <h1 className="titre-page">Messagerie</h1>
+            <Messagerie user={user} />
+          </>
+        )}
       </main>
     </div>
   );
