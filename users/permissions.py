@@ -19,3 +19,7 @@ class IsEncadrantOrAdmin(BasePermission):
 class IsAdminRole(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role == User.Role.ADMIN
+
+class IsEncadrant(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == User.Role.ENCADRANT   
