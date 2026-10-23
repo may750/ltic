@@ -6,6 +6,7 @@ from .views import (
     DocumentViewSet,
     FeedbackViewSet,
     MessageViewSet,
+    NotificationViewSet,
     StageViewSet,
     TacheViewSet,
 )
@@ -16,5 +17,6 @@ router.register("taches", TacheViewSet, basename="tache")
 router.register("documents", DocumentViewSet, basename="document")
 router.register("feedbacks", FeedbackViewSet, basename="feedback")
 router.register("messages", MessageViewSet, basename="message")
+router.register("notifications", NotificationViewSet, basename="notification")
 
 urlpatterns = [path("contacts/", ContactsView.as_view(), name="contacts")] + router.urls

@@ -1,6 +1,6 @@
-
 from django.db.models import Q
 from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,15 +10,17 @@ from users.models import User
 from users.permissions import IsEncadrant, IsEncadrantOrAdmin, IsStagiaire
 from users.serializers import UserSerializer
 
-from .models import Document, Feedback, Message, Stage, Tache
+from .models import Document, Feedback, Message, Notification, Stage, Tache
 from .serializers import (
     DocumentSerializer,
     FeedbackSerializer,
     MessageSerializer,
+    NotificationSerializer,
     StageSerializer,
     TacheEtatSerializer,
     TacheSerializer,
 )
+
 
 
 def stagiaires_visibles(user):
@@ -151,3 +153,21 @@ class MessageViewSet(
         if not contacts_autorises(self.request.user).filter(pk=destinataire.pk).exists():
             raise PermissionDenied("Vous ne pouvez pas écrire à cette personne.")
         serializer.save(expediteur=self.request.user)    
+
+
+class NotificationViewSet(
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    """Chacun voit seulement ses propres notifications."""
+
+    serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        return Notification.objects.filter(utilisateur=self.request.user)
+
+    @action(detail=False, methods=["post"])
+    def tout_lire(self, request):
+        self.get_queryset().update(lue=True)
+        return Response({"ok": True})        

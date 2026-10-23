@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Document, Feedback, Message, Stage, Tache
+from .models import Document, Feedback, Message, Notification, Stage, Tache
 
 
 class StageSerializer(serializers.ModelSerializer):
@@ -42,3 +42,10 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = ["id", "expediteur", "destinataire", "contenu", "date_envoi"]
         read_only_fields = ["expediteur", "date_envoi"]        
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ["id", "contenu", "date", "lue"]
+        read_only_fields = ["contenu", "date"]        
