@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "./api";
 import Messagerie from "./Messagerie";
 import Notifications from "./Notifications";
+import ProjetsIA from "./ProjetsIA";
 
 // Le « cadre » commun à toutes les pages : menu à gauche + contenu à droite
 export default function Layout({ user, roleLabel, titre, onDeconnecter, children }) {
@@ -35,6 +36,14 @@ export default function Layout({ user, roleLabel, titre, onDeconnecter, children
           >
             Tableau de bord
           </div>
+          {user.role === "STAGIAIRE" && (
+            <div
+              className={"menu-item cliquable" + (page === "projets" ? " actif" : "")}
+              onClick={() => setPage("projets")}
+            >
+              Mes projets IA
+            </div>
+          )}
           <div
             className={"menu-item cliquable" + (page === "messagerie" ? " actif" : "")}
             onClick={() => setPage("messagerie")}
@@ -67,6 +76,12 @@ export default function Layout({ user, roleLabel, titre, onDeconnecter, children
           <>
             <h1 className="titre-page">{titre}</h1>
             {children}
+          </>
+        )}
+        {page === "projets" && (
+          <>
+            <h1 className="titre-page">Mes projets suggérés par l'IA</h1>
+            <ProjetsIA />
           </>
         )}
         {page === "messagerie" && (

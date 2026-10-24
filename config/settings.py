@@ -3,9 +3,12 @@ Django settings for config project (projet LTIC).
 """
 
 from pathlib import Path
+import os
+
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(BASE_DIR / ".env", override=True)
 SECRET_KEY = "django-insecure-vs^z+3@10yo8owi)%1_+ljmj800o4@y&5$xxveu2ed^6oa$ej("
 
 DEBUG = True
@@ -109,3 +112,9 @@ REST_FRAMEWORK = {
 }
 
 LOGIN_REDIRECT_URL = "/api/auth/me/"
+
+
+# Intelligence artificielle (les valeurs viennent du fichier .env)
+AI_API_KEY = os.getenv("AI_API_KEY", "")
+AI_BASE_URL = os.getenv("AI_BASE_URL", "")
+AI_MODEL = os.getenv("AI_MODEL", "")

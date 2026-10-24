@@ -102,6 +102,9 @@ class SuggestionProjet(models.Model):
     titre = models.CharField(max_length=200)
     description = models.TextField()
     score = models.FloatField(default=0)
+    explication = models.TextField(blank=True, default="")
+    competences_cibles = models.CharField(max_length=300, blank=True, default="")
+    date = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.titre

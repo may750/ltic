@@ -10,6 +10,7 @@ from .views import (
     StageViewSet,
     TacheViewSet,
 )
+from .views_ia import SuggestionsView
 
 router = DefaultRouter()
 router.register("stages", StageViewSet, basename="stage")
@@ -19,4 +20,7 @@ router.register("feedbacks", FeedbackViewSet, basename="feedback")
 router.register("messages", MessageViewSet, basename="message")
 router.register("notifications", NotificationViewSet, basename="notification")
 
-urlpatterns = [path("contacts/", ContactsView.as_view(), name="contacts")] + router.urls
+urlpatterns = [
+    path("contacts/", ContactsView.as_view(), name="contacts"),
+    path("suggestions/", SuggestionsView.as_view(), name="suggestions"),
+] + router.urls

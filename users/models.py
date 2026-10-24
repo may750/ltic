@@ -13,7 +13,8 @@ class User(AbstractUser):
     # Attributs du stagiaire
     specialite = models.CharField(max_length=100, blank=True)
     competences = models.TextField(blank=True)
-    cv = models.FileField(upload_to="cv/", blank=True)
+    centres_interet = models.TextField(blank=True)
+    cv = models.FileField(upload_to="cv/", blank=True, null=True)
     encadrant = models.ForeignKey(
         "self", null=True, blank=True, on_delete=models.SET_NULL,
         related_name="stagiaires", limit_choices_to={"role": "ENCADRANT"},
